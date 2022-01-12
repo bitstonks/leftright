@@ -4,7 +4,7 @@ import (
 	"runtime"
 	"sync/atomic"
 
-	"github.com/bitstonks/leftright/deque"
+	"github.com/bitstonks/leftright/pkg/deque"
 )
 
 // Operation is the generic input accepted by the left-right data structure. Named for readability. Should be immutable.

@@ -2,7 +2,7 @@ package lock_test
 
 import (
 	"fmt"
-	"github.com/bitstonks/leftright/lock"
+	"github.com/bitstonks/leftright/pkg/lock"
 )
 
 type store map[string]string
