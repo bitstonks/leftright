@@ -21,3 +21,4 @@ See `lock/simple_example_test.go` for an example usage of the lock API.
 # TODO
 * Performance test to compare it with sync.Map.
 * A more realistic example with goroutines.
+* Add Go report card badges.
