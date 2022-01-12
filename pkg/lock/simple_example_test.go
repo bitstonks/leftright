@@ -6,6 +6,7 @@ import (
 )
 
 type store map[string]string
+
 func newStore() *store {
 	s := make(store)
 	return &s
@@ -33,7 +34,7 @@ func Example_simple() {
 
 	// Call RLock to read the data. Save the locking artefact, because you need it to call RUnlock later.
 	data, artefact := lock.RLock()
-	s := *data.(*store)  // No generics so we have to manually cast :(
+	s := *data.(*store) // No generics so we have to manually cast :(
 	// Read from `s` in any way you want.
 	fmt.Println(s["test"])
 	// Output: value

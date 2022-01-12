@@ -9,6 +9,7 @@ import (
 )
 
 type testData map[string]string
+
 func newTestData() *testData {
 	s := make(testData)
 	return &s
@@ -75,7 +76,7 @@ func TestSimpleWait(t *testing.T) {
 	// Start a read lock and verify that writing is blocked.
 	m, art := lock.RLock()
 	go write(&wg, writeCompleted, lock)
-	time.Sleep(time.Millisecond*20)
+	time.Sleep(time.Millisecond * 20)
 
 	// Verify that the data was not published.
 	// NOTE: If we started a new read here, we would probably be able to see changes as it would read from the new side.
@@ -116,7 +117,7 @@ func TestRaceConditionWait(t *testing.T) {
 	atomic.StoreInt64(lock.numReaders[art], 1)
 
 	go write(&wg, writeCompleted, lock)
-	time.Sleep(time.Millisecond*20)
+	time.Sleep(time.Millisecond * 20)
 	// Verify that writer is blocked
 	assert.Equal(t, int32(0), atomic.LoadInt32(writeCompleted))
 
