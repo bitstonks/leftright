@@ -1,7 +1,8 @@
 [![Go Tests](https://github.com/bitstonks/leftright/actions/workflows/go.yml/badge.svg)](https://github.com/bitstonks/syndi/actions/workflows/go.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/bitstonks/leftright)](https://goreportcard.com/report/github.com/bitstonks/leftright)
 [![Go Reference](https://pkg.go.dev/badge/github.com/bitstonks/leftright.svg)](https://pkg.go.dev/github.com/bitstonks/leftright)
-[![Release](https://img.shields.io/github/release/bitstonks/leftright.svg)](https://github.com/bitstonks/leftright/releases/latest)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/bitstonks/leftright.svg)](https://github.com/bitstonks/leftright/blob/main/go.mod)
+[![Module Version](https://img.shields.io/github/v/tag/bitstonks/leftright.svg)](https://github.com/bitstonks/leftright/tags)
 
 # Left Right Concurrency In Go
 
