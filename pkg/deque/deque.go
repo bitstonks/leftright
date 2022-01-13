@@ -40,26 +40,33 @@ func (q *Deque) Len() int {
 	return q.count
 }
 
-// checkCapacity checks if deque has enough memory for an additional element and allocates more if not.
+// checkCapacity doubles the capacity of deque if it ran out of space.
 func (q *Deque) checkCapacity() {
+	if q.count < len(q.data) {
+		return
+	}
+
 	if len(q.data) == 0 {
 		q.data = make([]Operation, 1)
 		return
 	}
 
-	if q.count == len(q.data) {
-		// Ran out of capacity. Double it.
+	if q.head == 0 {
+		// If head is at zero, we don't have to do any work, just append empty slots.
 		q.data = append(q.data, make([]Operation, q.count)...)
-		// Since we're using a ring buffer we have to fix the tail unless in the magic case where head is at 0.
-		if q.head == 0 {
-			return
-		}
-		// Because data is full we know that it looks something like: 6 7 T H 2 3 4 5 . . . . . . . .
-		// but we want to change it to: . . . H 2 3 4 5 6 7 T . . . . .
-		for i := 0; i <= q.tail; i++ {
-			q.data[i+q.count], q.data[i] = q.data[i], q.data[i+q.count]
-		}
-		q.tail += q.count
+		return
+	}
+	// Since we're using a ring buffer we have to move elements around to ensure a sequential buffer.
+	// Because data is full we know that it looks something like: 6 7 T H 2 3 4 5
+	// but we want to change it to: . . . H 2 3 4 5 6 7 T . . . . .
+	// We do this by duplicating it and then setting unneeded elements to nil to prevent memory leaks.
+	q.data = append(q.data, q.data...)
+	q.tail += q.count
+	for i := 0; i < q.head; i++ {
+		q.data[i] = nil
+	}
+	for i := q.tail+1; i < len(q.data); i++ {
+		q.data[i] = nil
 	}
 }
 
