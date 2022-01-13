@@ -26,7 +26,7 @@ func TestFrontQueue(t *testing.T) {
 
 	assert.Equal(t, 0, q.Len())
 
-	v, err = q.PopFront()
+	_, err = q.PopFront()
 	assert.NotNil(t, err)
 
 	assert.Equal(t, 0, q.Len())
@@ -53,7 +53,7 @@ func TestBackQueue(t *testing.T) {
 
 	assert.Equal(t, 0, q.Len())
 
-	v, err = q.PopBack()
+	_, err = q.PopBack()
 	assert.NotNil(t, err)
 
 	assert.Equal(t, 0, q.Len())
@@ -79,7 +79,7 @@ func TestBackStack(t *testing.T) {
 	assert.Equal(t, 1, v)
 
 	assert.Equal(t, 0, q.Len())
-	v, err = q.PopBack()
+	_, err = q.PopBack()
 	assert.NotNil(t, err)
 
 	assert.Equal(t, 0, q.Len())
@@ -105,7 +105,7 @@ func TestFrontStack(t *testing.T) {
 	assert.Equal(t, 1, v)
 
 	assert.Equal(t, 0, q.Len())
-	v, err = q.PopFront()
+	_, err = q.PopFront()
 	assert.NotNil(t, err)
 
 	assert.Equal(t, 0, q.Len())
