@@ -9,7 +9,7 @@ func BenchmarkChan_FillDrain(b *testing.B) {
 	}
 
 	for i := 0; i < b.N; i++ {
-		<- c
+		<-c
 	}
 }
 
@@ -42,7 +42,7 @@ func BenchmarkChan_Queue(b *testing.B) {
 	c := make(chan int, 1)
 	for i := 0; i < b.N; i++ {
 		c <- i
-		<- c
+		<-c
 	}
 }
 
@@ -59,8 +59,8 @@ func BenchmarkChan_Queue2(b *testing.B) {
 	for i := 0; i < b.N/2; i++ {
 		c <- i
 		c <- i
-		<- c
-		<- c
+		<-c
+		<-c
 	}
 }
 

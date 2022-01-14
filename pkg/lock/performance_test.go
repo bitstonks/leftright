@@ -62,19 +62,19 @@ func conLrRead(nReads, nThreads int) *sync.WaitGroup {
 	l.Update(input{"test", "123"})
 	r.Update(input{"test", "123"})
 	lr := *NewLeftRightLock(l, r)
-	return runConcurrent(nThreads, func(wg *sync.WaitGroup){lrRead(lr, "test", nReads, wg)})
+	return runConcurrent(nThreads, func(wg *sync.WaitGroup) { lrRead(lr, "test", nReads, wg) })
 }
 
 func conSmRead(nReads, nThreads int) *sync.WaitGroup {
 	var m sync.Map
 	m.Store("test", "123")
-	return runConcurrent(nThreads, func(wg *sync.WaitGroup){smRead(&m, "test", nReads, wg)})
+	return runConcurrent(nThreads, func(wg *sync.WaitGroup) { smRead(&m, "test", nReads, wg) })
 }
 
 func conRwRead(nReads, nThreads int) *sync.WaitGroup {
 	mu := sync.RWMutex{}
 	m := map[string]string{"test": "123"}
-	return runConcurrent(nThreads, func(wg *sync.WaitGroup){rwRead(&m, &mu, "test", nReads, wg)})
+	return runConcurrent(nThreads, func(wg *sync.WaitGroup) { rwRead(&m, &mu, "test", nReads, wg) })
 }
 
 func BenchmarkAtomic(b *testing.B) {
@@ -89,7 +89,7 @@ func BenchmarkAtomic(b *testing.B) {
 
 func BenchmarkAtomic10(b *testing.B) {
 	x := new(int64)
-	runConcurrent(2, func(wg *sync.WaitGroup){
+	runConcurrent(2, func(wg *sync.WaitGroup) {
 		for i := 0; i < b.N; i++ {
 			atomic.LoadInt64(x)
 			atomic.LoadInt64(x)
@@ -182,7 +182,7 @@ func BenchmarkLeftRight_WriteRead1(b *testing.B) {
 	l.Update(input{"test", "123"})
 	r.Update(input{"test", "123"})
 	lr := *NewLeftRightLock(l, r)
-	wg := runConcurrent(1, func(wg *sync.WaitGroup){lrRead(lr, "test", b.N, wg)})
+	wg := runConcurrent(1, func(wg *sync.WaitGroup) { lrRead(lr, "test", b.N, wg) })
 	for i := 0; i < b.N; i++ {
 		lr.Write(input{fmt.Sprintf("test%d", rand.Intn(N)), "123"})
 		lr.Publish()
@@ -193,7 +193,7 @@ func BenchmarkLeftRight_WriteRead1(b *testing.B) {
 func BenchmarkSyncMap_WriteRead1(b *testing.B) {
 	var m sync.Map
 	m.Store("test", "123")
-	wg := runConcurrent(1, func(wg *sync.WaitGroup){smRead(&m, "test", b.N, wg)})
+	wg := runConcurrent(1, func(wg *sync.WaitGroup) { smRead(&m, "test", b.N, wg) })
 	for i := 0; i < b.N; i++ {
 		m.Store(fmt.Sprintf("test%d", rand.Intn(N)), "123")
 	}
@@ -203,7 +203,7 @@ func BenchmarkSyncMap_WriteRead1(b *testing.B) {
 func BenchmarkRWLock_WriteRead1(b *testing.B) {
 	var mu sync.RWMutex
 	m := map[string]string{"test": "123"}
-	wg := runConcurrent(1, func(wg *sync.WaitGroup){rwRead(&m, &mu, "test", b.N, wg)})
+	wg := runConcurrent(1, func(wg *sync.WaitGroup) { rwRead(&m, &mu, "test", b.N, wg) })
 	for i := 0; i < b.N; i++ {
 		mu.Lock()
 		m[fmt.Sprintf("test%d", rand.Intn(N))] = "123"
@@ -217,7 +217,7 @@ func BenchmarkLeftRight_WriteRead4(b *testing.B) {
 	l.Update(input{"test", "123"})
 	r.Update(input{"test", "123"})
 	lr := *NewLeftRightLock(l, r)
-	wg := runConcurrent(4, func(wg *sync.WaitGroup){lrRead(lr, "test", b.N, wg)})
+	wg := runConcurrent(4, func(wg *sync.WaitGroup) { lrRead(lr, "test", b.N, wg) })
 	for i := 0; i < b.N; i++ {
 		lr.Write(input{fmt.Sprintf("test%d", rand.Intn(N)), "123"})
 		lr.Publish()
@@ -228,7 +228,7 @@ func BenchmarkLeftRight_WriteRead4(b *testing.B) {
 func BenchmarkSyncMap_WriteRead4(b *testing.B) {
 	var m sync.Map
 	m.Store("test", "123")
-	wg := runConcurrent(4, func(wg *sync.WaitGroup){smRead(&m, "test", b.N, wg)})
+	wg := runConcurrent(4, func(wg *sync.WaitGroup) { smRead(&m, "test", b.N, wg) })
 	for i := 0; i < b.N; i++ {
 		m.Store(fmt.Sprintf("test%d", rand.Intn(N)), "123")
 	}
@@ -238,7 +238,7 @@ func BenchmarkSyncMap_WriteRead4(b *testing.B) {
 func BenchmarkRWLock_WriteRead4(b *testing.B) {
 	var mu sync.RWMutex
 	m := map[string]string{"test": "123"}
-	wg := runConcurrent(4, func(wg *sync.WaitGroup){rwRead(&m, &mu, "test", b.N, wg)})
+	wg := runConcurrent(4, func(wg *sync.WaitGroup) { rwRead(&m, &mu, "test", b.N, wg) })
 	for i := 0; i < b.N; i++ {
 		mu.Lock()
 		m[fmt.Sprintf("test%d", rand.Intn(N))] = "123"

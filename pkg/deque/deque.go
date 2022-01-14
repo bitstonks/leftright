@@ -65,7 +65,7 @@ func (q *Deque) checkCapacity() {
 	for i := 0; i < q.head; i++ {
 		q.data[i] = nil
 	}
-	for i := q.tail+1; i < len(q.data); i++ {
+	for i := q.tail + 1; i < len(q.data); i++ {
 		q.data[i] = nil
 	}
 }
