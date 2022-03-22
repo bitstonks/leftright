@@ -25,7 +25,7 @@ type LeftRightLock struct {
 	// data holds the left and right structures, which we'll be reading and updating.
 	data [2]LeftRightStructure
 	// opQ is a queue used to store operations that were only applied on a single side of the structure.
-	opQ deque.Deque
+	opQ deque.Deque[Operation]
 	// numReaders is an array of 2 atomic ints, counting numbers of readers on the left/right instance.
 	numReaders [2]*int64
 	// sideToLock is an atomic var (0 or 1) and determines which side the reader locks before it starts to read.
@@ -38,7 +38,7 @@ type LeftRightLock struct {
 func NewLeftRightLock(left, right LeftRightStructure) *LeftRightLock {
 	m := &LeftRightLock{
 		data:       [2]LeftRightStructure{left, right},
-		opQ:        deque.NewDeque(),
+		opQ:        deque.NewDeque[Operation](),
 		numReaders: [2]*int64{new(int64), new(int64)},
 		// Start reading on Left as this is initialized to 0
 		sideToLock: new(int32),

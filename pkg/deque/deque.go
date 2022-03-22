@@ -4,13 +4,12 @@ import (
 	"errors"
 )
 
-// Operation is the generic input accepted by the left-right data structure. Defined as an alias for readability.
-type Operation interface{}
-
 // Deque is a generic double ended queue implemented with a ring buffer.
-type Deque struct {
+type Deque[Item any] struct {
 	// data is the underlying data storage. Starts at a given capacity and is doubled whenever we fill it.
-	data []Operation
+	data []Item
+	// none is used as the zero value for Item
+	none Item
 	// head is the index of the first valid element in data, if any.
 	head int
 	// tail is the index of the last valid element in data, if any.
@@ -20,9 +19,9 @@ type Deque struct {
 }
 
 // NewDequeWithCapacity creates a new deque with an initial capacity of `cap`.
-func NewDequeWithCapacity(cap int) Deque {
-	return Deque{
-		data:  make([]Operation, cap),
+func NewDequeWithCapacity[Item any](cap int) Deque[Item] {
+	return Deque[Item]{
+		data:  make([]Item, cap),
 		head:  0,
 		tail:  0,
 		count: 0,
@@ -31,29 +30,29 @@ func NewDequeWithCapacity(cap int) Deque {
 
 // NewDeque creates a new Deque with initial capacity 16.
 // Why 16? https://youtu.be/0obMRztklqU
-func NewDeque() Deque {
-	return NewDequeWithCapacity(16)
+func NewDeque[Item any]() Deque[Item] {
+	return NewDequeWithCapacity[Item](16)
 }
 
 // Len returns the number of elements in the deque.
-func (q *Deque) Len() int {
+func (q *Deque[Item]) Len() int {
 	return q.count
 }
 
 // checkCapacity doubles the capacity of deque if it ran out of space.
-func (q *Deque) checkCapacity() {
+func (q *Deque[Item]) checkCapacity() {
 	if q.count < len(q.data) {
 		return
 	}
 
 	if len(q.data) == 0 {
-		q.data = make([]Operation, 1)
+		q.data = make([]Item, 1)
 		return
 	}
 
 	if q.head == 0 {
 		// If head is at zero, we don't have to do any work, just append empty slots.
-		q.data = append(q.data, make([]Operation, q.count)...)
+		q.data = append(q.data, make([]Item, q.count)...)
 		return
 	}
 	// Since we're using a ring buffer we have to move elements around to ensure a sequential buffer.
@@ -63,15 +62,15 @@ func (q *Deque) checkCapacity() {
 	q.data = append(q.data, q.data...)
 	q.tail += q.count
 	for i := 0; i < q.head; i++ {
-		q.data[i] = nil
+		q.data[i] = q.none
 	}
 	for i := q.tail + 1; i < len(q.data); i++ {
-		q.data[i] = nil
+		q.data[i] = q.none
 	}
 }
 
 // PushBack inserts a new element at the end.
-func (q *Deque) PushBack(op Operation) {
+func (q *Deque[Item]) PushBack(it Item) {
 	q.checkCapacity()
 	if q.count == 0 {
 		q.head = 0
@@ -80,12 +79,12 @@ func (q *Deque) PushBack(op Operation) {
 		q.tail += 1
 		q.tail %= len(q.data)
 	}
-	q.data[q.tail] = op
+	q.data[q.tail] = it
 	q.count += 1
 }
 
 // PushFront inserts a new element at the start.
-func (q *Deque) PushFront(op Operation) {
+func (q *Deque[Item]) PushFront(it Item) {
 	q.checkCapacity()
 	if q.count == 0 {
 		q.head = 0
@@ -94,17 +93,17 @@ func (q *Deque) PushFront(op Operation) {
 		q.head += len(q.data) - 1
 		q.head %= len(q.data)
 	}
-	q.data[q.head] = op
+	q.data[q.head] = it
 	q.count += 1
 }
 
 // PopBack removes and returns the last element in deque or returns an error if deque is empty.
-func (q *Deque) PopBack() (Operation, error) {
+func (q *Deque[Item]) PopBack() (Item, error) {
 	if q.count == 0 {
-		return nil, errors.New("cannot PopBack because deque is empty")
+		return q.none, errors.New("cannot PopBack because deque is empty")
 	}
 	val := q.data[q.tail]
-	q.data[q.tail] = nil
+	q.data[q.tail] = q.none
 	q.count -= 1
 	q.tail += len(q.data) - 1
 	q.tail %= len(q.data)
@@ -112,12 +111,12 @@ func (q *Deque) PopBack() (Operation, error) {
 }
 
 // PopFront removes and returns the first element in deque or returns an error if deque is empty.
-func (q *Deque) PopFront() (Operation, error) {
+func (q *Deque[Item]) PopFront() (Item, error) {
 	if q.count == 0 {
-		return nil, errors.New("cannot PopFront because deque is empty")
+		return q.none, errors.New("cannot PopFront because deque is empty")
 	}
 	val := q.data[q.head]
-	q.data[q.head] = nil
+	q.data[q.head] = q.none
 	q.count -= 1
 	q.head += 1
 	q.head %= len(q.data)
