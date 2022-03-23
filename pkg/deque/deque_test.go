@@ -6,7 +6,7 @@ import (
 )
 
 func TestFrontQueue(t *testing.T) {
-	q := NewDeque()
+	q := NewDeque[int]()
 	q.PushBack(1)
 	q.PushBack(2)
 	q.PushBack(3)
@@ -33,7 +33,7 @@ func TestFrontQueue(t *testing.T) {
 }
 
 func TestBackQueue(t *testing.T) {
-	q := NewDeque()
+	q := NewDeque[int]()
 	q.PushFront(1)
 	q.PushFront(2)
 	q.PushFront(3)
@@ -60,7 +60,7 @@ func TestBackQueue(t *testing.T) {
 }
 
 func TestBackStack(t *testing.T) {
-	q := NewDeque()
+	q := NewDeque[int]()
 	q.PushBack(1)
 	q.PushBack(2)
 	q.PushBack(3)
@@ -86,7 +86,7 @@ func TestBackStack(t *testing.T) {
 }
 
 func TestFrontStack(t *testing.T) {
-	q := NewDeque()
+	q := NewDeque[int]()
 	q.PushFront(1)
 	q.PushFront(2)
 	q.PushFront(3)
@@ -112,7 +112,7 @@ func TestFrontStack(t *testing.T) {
 }
 
 func TestResize(t *testing.T) {
-	q := NewDequeWithCapacity(0)
+	q := NewDequeWithCapacity[int](0)
 	assert.Equal(t, 0, len(q.data))
 
 	q.PushBack(1)

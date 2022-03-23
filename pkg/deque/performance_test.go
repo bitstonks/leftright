@@ -14,7 +14,7 @@ func BenchmarkChan_FillDrain(b *testing.B) {
 }
 
 func BenchmarkDeque_FillDrain(b *testing.B) {
-	d := NewDequeWithCapacity(b.N)
+	d := NewDequeWithCapacity[int](b.N)
 	for i := 0; i < b.N; i++ {
 		d.PushBack(i)
 	}
@@ -32,7 +32,7 @@ func BenchmarkChan_Push(b *testing.B) {
 }
 
 func BenchmarkDeque_Push(b *testing.B) {
-	d := NewDequeWithCapacity(b.N)
+	d := NewDequeWithCapacity[int](b.N)
 	for i := 0; i < b.N; i++ {
 		d.PushBack(i)
 	}
@@ -47,7 +47,7 @@ func BenchmarkChan_Queue(b *testing.B) {
 }
 
 func BenchmarkDeque_Queue(b *testing.B) {
-	d := NewDequeWithCapacity(1)
+	d := NewDequeWithCapacity[int](1)
 	for i := 0; i < b.N; i++ {
 		d.PushBack(i)
 		d.PopFront()
@@ -65,7 +65,7 @@ func BenchmarkChan_Queue2(b *testing.B) {
 }
 
 func BenchmarkDeque_Queue2(b *testing.B) {
-	d := NewDequeWithCapacity(2)
+	d := NewDequeWithCapacity[int](2)
 	for i := 0; i < b.N/2; i++ {
 		d.PushBack(i)
 		d.PushBack(i)
